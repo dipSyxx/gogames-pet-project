@@ -1,11 +1,13 @@
 import React from 'react'
 import styles from './FooterStyles.module.sass'
 import { Link } from 'react-scroll'
+import { motion } from 'framer-motion'
+import { opacityAnimations, textAnimationsBottom } from '@/Animations'
 
 export const Footer = () => {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
+    <motion.footer initial="hidden" whileInView="visible" viewport={{ once: true }} className={styles.footer}>
+      <motion.div variants={textAnimationsBottom} custom={1} className={styles.container}>
         <Link to="home" spy={true} smooth={true} offset={50} duration={600} className={styles.footer_logos}>
           <img src="/logo/logoHead.png" alt="logoHead" />
           <img className={styles.logoText} src="/logo/logoText.png" alt="logoHead" />
@@ -29,7 +31,7 @@ export const Footer = () => {
             </li>
           </a>
         </ul>
-      </div>
-    </footer>
+      </motion.div>
+    </motion.footer>
   )
 }

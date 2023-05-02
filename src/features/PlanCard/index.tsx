@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+/* eslint-disable react/display-name */
+import React, { forwardRef, useState } from 'react'
 import styles from './PlanCard.module.sass'
 import { PlansData, PlansDataProps } from '@/data/PlansData'
 import { Button } from '@/elements/Button'
 import clsx from 'clsx'
+import { motion } from 'framer-motion'
+import { textAnimations } from '@/Animations'
 
-export const PlanCard = ({ id, title, cost, services }: PlansDataProps) => {
+export const PlanCard = forwardRef(({ id, title, cost, services, index }: PlansDataProps) => {
   const servicesTick = services
 
   const [selectedId, setSelectedId] = useState<number | null>(null)
@@ -27,7 +30,9 @@ export const PlanCard = ({ id, title, cost, services }: PlansDataProps) => {
   }
 
   return (
-    <div
+    <motion.div
+      variants={textAnimations}
+      custom={index}
       className={clsx(styles.card, {
         [styles.active]: selectedId === id,
       })}
@@ -70,6 +75,8 @@ export const PlanCard = ({ id, title, cost, services }: PlansDataProps) => {
         </Button>
       </div>
       {selectedId === id ? <img className={styles.effect} src="/Plans/effect.png" alt="effect" /> : ''}
-    </div>
+    </motion.div>
   )
-}
+})
+
+export const MPlanCard = motion(PlanCard)
