@@ -4,6 +4,8 @@ export type PlansDataProps = {
   cost: number
   services: string[]
   index: number
+  isActive?: boolean
+  onActivate?: () => void
 }
 
 export const PlansData: PlansDataProps[] = [

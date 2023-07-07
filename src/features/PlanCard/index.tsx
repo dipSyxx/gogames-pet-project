@@ -7,42 +7,21 @@ import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { textAnimations } from '@/Animations'
 
-export const PlanCard = forwardRef(({ id, title, cost, services, index }: PlansDataProps) => {
-  const servicesTick = services
-
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-
-  // Створіть функцію для обробки кліків на картці
-  const handleCardClick = (id: number) => {
-    if (selectedId === id) {
-      // Якщо обрана картка вже була натиснута, заберіть стилі
-      setSelectedId(null)
-    } else {
-      // Якщо обрана нова картка, додайте стилі та деактивуйте попередню картку
-      setSelectedId(id)
-      if (selectedId !== null) {
-        const prevSelectedCard = document.getElementById(`plan-card-${selectedId}`)
-        if (prevSelectedCard) {
-          prevSelectedCard.classList.remove(styles.active)
-        }
-      }
-    }
-  }
+export const PlanCard = forwardRef(({ isActive, onActivate, ...plans }: PlansDataProps, ref) => {
+  const servicesTick = plans.services
 
   return (
     <motion.div
       variants={textAnimations}
-      custom={index}
-      className={clsx(styles.card, {
-        [styles.active]: selectedId === id,
-      })}
-      onClick={() => handleCardClick(id)} // Додайте обробник кліків на весь контейнер картки
-      id={`plan-card-${id}`} // Додайте ID для контейнера картки
+      custom={plans.index}
+      className={clsx(styles.card, isActive ? styles.active : '')}
+      onClick={onActivate}
+      key={plans.id}
     >
       <div className={styles.card_content}>
         <div className={styles.content_title}>
-          {title}{' '}
-          {selectedId === id ? (
+          {plans.title}{' '}
+          {isActive ? (
             <div className={styles.selected_check}>
               <span>
                 <img src="/Plans/checkSelected.png" alt="check" />
@@ -54,14 +33,14 @@ export const PlanCard = forwardRef(({ id, title, cost, services, index }: PlansD
         </div>
         <div className={styles.content_cost}>
           <span className={styles.dollar}>$</span>
-          {cost}
+          {plans.cost}
           <span>.00</span>
           <span className={styles.perHour}>/Per Hour</span>
         </div>
         <ul className={styles.services_list}>
           {servicesTick.map((value: string, i: number) => (
             <li key={i} className={styles.list_item}>
-              {selectedId === id ? (
+              {isActive ? (
                 <img src="/Plans/checkSelected.png" alt="chekSelected" />
               ) : (
                 <img src="/Plans/check.png" alt="check" />
@@ -71,10 +50,10 @@ export const PlanCard = forwardRef(({ id, title, cost, services, index }: PlansD
           ))}
         </ul>
         <Button component="button" variant="SelectThis" classNameStyles="button">
-          {selectedId === id ? 'Selected' : 'Select This Plan'}
+          {isActive ? 'Selected' : 'Select This Plan'}
         </Button>
       </div>
-      {selectedId === id ? <img className={styles.effect} src="/Plans/effect.png" alt="effect" /> : ''}
+      {isActive ? <img className={styles.effect} src="/Plans/effect.png" alt="effect" /> : ''}
     </motion.div>
   )
 })
